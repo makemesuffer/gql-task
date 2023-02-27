@@ -1,0 +1,68 @@
+scalar UUID
+
+enum UserRole {
+  ADMIN
+  FRUIT_JOHN
+  VEGETARIAN_MARY
+}
+
+input UserCredentials {
+  role: UserRole!
+  password: String!
+}
+
+interface MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+type Query {
+  accessToken(dto: UserCredentials!): String!
+  users: [User!]!
+  vegetables: [Vegetable!]!
+  fruits: [Fruit!]!
+  vegetable(id: UUID!): Vegetable
+  fruit(id: UUID!): Fruit
+}
+
+type Vegetable {
+  id: UUID!
+  title: String!
+}
+
+type Fruit {
+  id: UUID!
+  title: String!
+}
+
+type User {
+  id: UUID!
+  role: UserRole!
+  password: String!
+}
+
+type MutationFruitResponse implements MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  fruit: Fruit!
+}
+
+type MutationVegetableResponse implements MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  vegetable: Vegetable!
+}
+
+type Mutation {
+  createFruit(title: String!): MutationFruitResponse!
+  createVegetable(title: String!): MutationVegetableResponse!
+
+  changeFruit(id: UUID!, title: String!): MutationFruitResponse!
+  changeVegetable(id: UUID!, title: String!): MutationVegetableResponse!
+
+  deleteFruit(id: UUID!): MutationFruitResponse!
+  deleteVegetable(id: UUID!): MutationVegetableResponse!
+}
